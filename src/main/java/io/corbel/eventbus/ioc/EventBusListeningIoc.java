@@ -52,9 +52,9 @@ import io.corbel.lib.rabbitmq.config.BackoffOptions;
     @Bean
     public ExecutorService threadPoolExecutor() {
         final AtomicInteger threadCounter = new AtomicInteger(1);
-        Integer threadsNumber = env.getProperty("io.corbel.eventbus.concurrency", Integer.class, Runtime.getRuntime().availableProcessors() * 2);
+        Integer threadsNumber = env.getProperty("eventbus.concurrency", Integer.class, Runtime.getRuntime().availableProcessors() * 2);
         return Executors.newFixedThreadPool(threadsNumber, runnable -> {
-            return new Thread(runnable, "io.corbel.eventbus-thread-" + threadCounter.getAndIncrement());
+            return new Thread(runnable, "eventbus-thread-" + threadCounter.getAndIncrement());
         });
     }
 
@@ -64,11 +64,11 @@ import io.corbel.lib.rabbitmq.config.BackoffOptions;
         return configurer -> {
             if(!isConsoleMode()){
                 String queueName = MessageFormat.format(EventBusRabbitMQ.EVENTNBUS_LISTENER_QUEUE_TEMPLATE,
-                        env.getProperty("io.corbel.eventbus.listener.name"));
+                        env.getProperty("eventbus.listener.name"));
                 configurer.bind(EventBusRabbitMQ.EVENTBUS_EXCHANGE, configurer.queue(queueName), Optional.empty(), Optional.empty());
                 SimpleMessageListenerContainer container = configurer.listenerContainer(
                         threadPoolExecutor,
-                        configurer.setRetryOpertations(Optional.ofNullable(env.getProperty("io.corbel.eventbus.maxAttempts", Integer.class)),
+                        configurer.setRetryOpertations(Optional.ofNullable(env.getProperty("eventbus.maxAttempts", Integer.class)),
                                 Optional.ofNullable(getBackoffOptions())), queueName);
                 container.setQueueNames(queueName);
                 container.setMessageListener(messageListenerAdapter);
@@ -89,9 +89,9 @@ import io.corbel.lib.rabbitmq.config.BackoffOptions;
     }
 
     private BackoffOptions getBackoffOptions() {
-        Long intialInterval = env.getProperty("io.corbel.eventbus.backoff.initialInterval", Long.class);
-        Double multiplier = env.getProperty("io.corbel.eventbus.backoff.multiplier", Double.class);
-        Long maxInterval = env.getProperty("io.corbel.eventbus.backoff.maxInterval", Long.class);
+        Long intialInterval = env.getProperty("eventbus.backoff.initialInterval", Long.class);
+        Double multiplier = env.getProperty("eventbus.backoff.multiplier", Double.class);
+        Long maxInterval = env.getProperty("eventbus.backoff.maxInterval", Long.class);
         if (intialInterval == null || maxInterval == null || multiplier == null) {
             return null;
         }

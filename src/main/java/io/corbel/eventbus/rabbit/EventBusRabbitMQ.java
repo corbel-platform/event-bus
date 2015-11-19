@@ -6,7 +6,7 @@ package io.corbel.eventbus.rabbit;
  */
 public interface EventBusRabbitMQ {
 
-    String EVENTBUS_EXCHANGE = "io.corbel.eventbus.exchange";
+    String EVENTBUS_EXCHANGE = "eventbus.exchange";
 
-    String EVENTNBUS_LISTENER_QUEUE_TEMPLATE = "io.corbel.eventbus.{0}.queue";
+    String EVENTNBUS_LISTENER_QUEUE_TEMPLATE = "eventbus.{0}.queue";
 }

@@ -22,6 +22,6 @@ import io.corbel.eventbus.service.RabbitEventBus;
 
     @Bean
     public EventBus getEventBus() {
-        return new RabbitEventBus(amqpTemplate, env.getProperty("io.corbel.eventbus.exchange"));
+        return new RabbitEventBus(amqpTemplate, env.getProperty("eventbus.exchange"));
     }
 }
