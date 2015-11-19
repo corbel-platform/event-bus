@@ -67,7 +67,7 @@ import io.corbel.lib.rabbitmq.ioc.AbstractRabbitMQConfiguration;
 
     @Override
     protected Optional<String> configPrefix() {
-        return Optional.of("io/corbel/eventbus");
+        return Optional.of("eventbus");
     }
 
 
